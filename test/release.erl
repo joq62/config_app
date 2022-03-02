@@ -41,15 +41,15 @@ start([Id,ReleaseFile])->
     Path="https://github.com/joq62/"++Id++".git",
     File=ReleaseFile,
     {ok,I1}=file:consult(File),
-    L1=[{Id,TagList,Path}||{Id,TagList,Path}<-I1,
-					  Id=:=RelId],
+    L1=[{XId,TagList,XPath}||{XId,TagList,XPath}<-I1,
+					  XId=:=RelId],
     TagString=os:cmd("git tag"),
     Tags1=string:tokens(TagString,"\n"), 
     case L1 of
 	[]->
 	    I2=lists:sort([{RelId,Tags1,Path}|I1]),
 	    unconsult(File,I2);
-	[{RelId,TagsX,Path1}]->
+	[{RelId,TagsX,_Path1}]->
 	    case lists:sort(TagsX)=:=lists:sort(Tags1) of
 		true->
 		    ok;

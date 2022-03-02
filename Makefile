@@ -23,4 +23,4 @@ eunit:
 release:
 	rm -rf  *~ */*~  test_ebin/* erl_cra*;
 	erlc -o test_ebin test/*.erl;
-	erl -pa test_ebin -run release start config_app ../inventory/release.inventory
+	erl -pa test_ebin -run release start config_app ../catalog/catalog.specs
