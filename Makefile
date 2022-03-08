@@ -5,11 +5,7 @@ all:
 	rm -rf ebin;
 	mkdir ebin;
 	rebar3 compile;
-	cp -r _build/default/lib/*/ebin/* ebin;	
-	rm -rf _build;
-	erlc -o test_ebin test/*.erl;
-	erl -pa test_ebin -pa ebin -sname test -run basic_eunit test;
-	rm -rf  catalog host_specs deployment_specs;	
+	rm -rf  _build ebin catalog host_specs deployment_specs test_ebin;	
 	echo Done
 eunit:
 	rm -rf  *~ */*~ src/*.beam test/*.beam test_ebin/* erl_cra*;

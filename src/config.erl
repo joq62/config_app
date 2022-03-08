@@ -38,6 +38,20 @@
 %% --------------------------------------------------------------------
 
 -export([
+	 %hosts
+	 connect/0,
+	 running/0,
+	 missing/0,	 
+	 nodes_to_connect/0,
+	 %catalog
+	 all/0,
+	 find/1,
+	 find/2,
+	 member/1,
+	 member/2,
+	 % deployment
+	 all_files/0,
+	 all_info/0
 
 	]).
 
@@ -62,6 +76,32 @@
 start()-> gen_server:start_link({local, ?SERVER}, ?SERVER, [], []).
 stop()-> gen_server:call(?SERVER, {stop},infinity).
 
+	 %hosts
+connect()->
+    gen_server:call(?SERVER, {connect},infinity).
+running()->
+    gen_server:call(?SERVER, {running},infinity).
+missing()->
+    gen_server:call(?SERVER, {missing},infinity).
+nodes_to_connect()->
+    gen_server:call(?SERVER, {nodes_to_connect},infinity).
+	 %catalog
+all()->
+    gen_server:call(?SERVER, {all},infinity).
+find(Id)->
+    gen_server:call(?SERVER, {find,Id},infinity).
+find(Id,Vsn)->
+   gen_server:call(?SERVER, {find,Id,Vsn},infinity).
+
+member(Id)->
+    gen_server:call(?SERVER, {member,Id},infinity).
+member(Id,Vsn)->
+   gen_server:call(?SERVER, {member,Id,Vsn},infinity).
+	 % deployment
+all_files()->
+   gen_server:call(?SERVER, {all_files},infinity).
+all_info()->
+    gen_server:call(?SERVER, {all_info},infinity).			    
 
 %%---------------------------------------------------------------
 -spec ping()-> {atom(),node(),module()}|{atom(),term()}.
@@ -105,6 +145,50 @@ init([]) ->
 %%          {stop, Reason, State}            (aterminate/2 is called)
 %% --------------------------------------------------------------------
 
+%% hosts
+handle_call({connect},_From,State) ->
+    Reply=hosts:connect(),
+    {reply, Reply, State};
+
+handle_call({running},_From,State) ->
+    Reply=hosts:running(),
+    {reply, Reply, State};
+
+handle_call({missing},_From,State) ->
+    Reply=hosts:missing(),
+    {reply, Reply, State};
+
+handle_call({nodes_to_connect},_From,State) ->
+    Reply=hosts:nodes_to_connect(),
+    {reply, Reply, State};
+
+handle_call({all},_From,State) ->
+    Reply=catalog:all(),
+    {reply, Reply, State};
+
+handle_call({find,Id},_From,State) ->
+    Reply=catalog:find(Id),
+    {reply, Reply, State};
+
+handle_call({find,Id,Vsn},_From,State) ->
+    Reply=catalog:find(Id,Vsn),
+    {reply, Reply, State};
+
+handle_call({member,Id},_From,State) ->
+    Reply=catalog:member(Id),
+    {reply, Reply, State};
+
+handle_call({member,Id,Vsn},_From,State) ->
+    Reply=catalog:member(Id,Vsn),
+    {reply, Reply, State};
+
+handle_call({all_files},_From,State) ->
+    Reply=deployment:all_files(),
+    {reply, Reply, State};
+
+handle_call({all_info},_From,State) ->
+    Reply=deployment:all_info(),
+    {reply, Reply, State};
 
 handle_call({ping},_From,State) ->
     Reply=pong,
