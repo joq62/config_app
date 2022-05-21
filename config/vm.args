@@ -1,0 +1,6 @@
+-sname oam_app
+
+-setcookie oam_app_cookie
+
++K true
++A30
