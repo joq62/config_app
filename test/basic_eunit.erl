@@ -27,7 +27,7 @@ start()->
     ok=application:start(config_app),
     ok=apps_test(),
     ok=host_test(),
-  %  ok=depl_test(),
+    ok=depl_test(),
     
     stop_test(),
     ok.
@@ -69,9 +69,20 @@ host_test()->
     ok.
 
 depl_test()->
-    io:format(" deployment all files ~p~n",[deployment:all_files()]),
-    io:format(" deployment:all_info() ~p~n",[deployment:all_info()]),
-   
+    DeplId="divi_app",
+    GlurkId="glurk",
+    true=lists:member(DeplId,config:deployment_id_all()),
+    {ok,"1.0.0"}=config:deployment_vsn(DeplId),
+    {ok,"divi_app"}=config:deployment_app_id(DeplId),
+    {ok,"1.0.0"}=config:deployment_app_vsns(DeplId),
+    {ok,[all]}=config:deployment_controller_nodes(DeplId),
+
+    %% error
+    {error,[eexists,"glurk"]}=config:deployment_vsn(GlurkId),
+    {error,[eexists,"glurk"]}=config:deployment_app_id(GlurkId),
+    {error,[eexists,"glurk"]}=config:deployment_app_vsns(GlurkId),
+    {error,[eexists,"glurk"]}=config:deployment_controller_nodes(GlurkId),
+       
     ok. 
 
 stop_test()->
