@@ -71,6 +71,9 @@ host_test()->
 depl_test()->
     DeplId="divi_app",
     GlurkId="glurk",
+    Controller='controller@c100',
+    
+    gl=config:deployment_appl_to_deploy(Controller),
     true=lists:member(DeplId,config:deployment_id_all()),
     {ok,"1.0.0"}=config:deployment_vsn(DeplId),
     {ok,"divi_app"}=config:deployment_app_id(DeplId),

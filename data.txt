@@ -1,0 +1,3 @@
+controller
+appl_to_deploy(Node)-> {AppId,Vsn,GitPath}
+

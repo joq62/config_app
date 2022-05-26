@@ -54,6 +54,7 @@
 	  host_cookie/1,
 	  host_application_config/1,
 	 %% deployment_info_specs
+	  deployment_appl_to_deploy/1,
 	  deployment_id_all/0,
 	  deployment_vsn/1,
 	  deployment_app_id/1,
@@ -126,8 +127,8 @@ deployment_app_vsns(DeplId)->
     gen_server:call(?SERVER, {deployment_app_vsns,DeplId},infinity).
 deployment_controller_nodes(DeplId)->
     gen_server:call(?SERVER, {deployment_controller_nodes,DeplId},infinity).
-
-
+deployment_appl_to_deploy(Controller)->
+    gen_server:call(?SERVER, {deployment_appl_to_deploy,Controller},infinity).
 
 
 %%---------------------------------------------------------------
@@ -170,6 +171,11 @@ init([]) ->
 %% --------------------------------------------------------------------
 
 %%----------------- deployment_info_specs
+
+handle_call({deployment_appl_to_deploy,Controller},_From,State) ->
+    Reply=deployment:appl_to_deploy(Controller),
+    {reply, Reply, State};
+
 handle_call({deployment_id_all},_From,State) ->
     Reply=deployment:id_all(),
     {reply, Reply, State};
